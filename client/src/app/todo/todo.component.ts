@@ -26,7 +26,6 @@ export interface DialogData {
   imports: [MatFormFieldModule, MatInputModule, FormsModule, MatButtonModule],
   template:`
     <div class="flex flex-col gap-4 py-8 px-4 w-[calc(100vw-280px)]">
-      <button (click)="addTodo()">Add Todo</button>
       <div class="flex flex-col gap-4">
         @for (todo of todos; track todo.id) {
           <div class="flex flex-col bg-gray-50 rounded-xl">
@@ -41,9 +40,9 @@ export interface DialogData {
                 </label>
               </label>
             </div>
-            <div class="flex gap-2 ml-5">
-              <button (click)="deleteTodo(todo.id)">Delete</button>
-              <button (click)="updateTodo(todo)">Update</button>
+            <div class="flex items-center gap-2 ml-5">
+              <button (click)="deleteTodo(todo.id)"><span class="material-symbols-outlined">delete</span></button>
+              <button (click)="updateTodo(todo)"><span class="material-symbols-outlined">edit</span></button>
             </div>
           </div>
         } @empty {
@@ -51,7 +50,7 @@ export interface DialogData {
         }
       </div>
     </div>
-    <button mat-raised-button (click)="openDialog()">Pick one</button>
+    <button mat-raised-button (click)="addTodo()">Add Todo</button>
 
   `,
   styleUrl: './todo.component.css'
@@ -69,7 +68,7 @@ export class TodoComponent {
     this.todos = this.todoService.getTodos();
   }
 
-  openDialog(): void {
+  addTodo() {
     const dialogRef = this.dialog.open(Dialog, {
       data: { title: this.title() }
     });
@@ -83,16 +82,8 @@ export class TodoComponent {
           description: '',
           completed: false
         });
+        this.todos = this.todoService.getTodos();
       }
-    });
-  }
-
-  addTodo() {
-    this.todoService.addTodo({
-      id: this.todos.length + 1,
-      title: `Todo ${this.todos.length + 1}`,
-      description: `This is todo ${this.todos.length + 1}`,
-      completed: false
     });
   }
 
@@ -102,7 +93,22 @@ export class TodoComponent {
   }
 
   updateTodo(todo:Todo) {
-    this.todoService.updateTodo(todo);
+    const dialogRef = this.dialog.open(Dialog, {
+      data: { title: todo.title }
+    });
+
+    dialogRef.afterClosed().subscribe(result => {
+      console.log('The dialog was closed');
+      if (result !== undefined) {
+        this.todoService.updateTodo({
+          id: todo.id,
+          title: result,
+          description: todo.description,
+          completed: todo.completed
+        });
+        this.todos = this.todoService.getTodos();
+      }
+    });
   }
 
   completeTodo(id:number) {
