@@ -1,6 +1,7 @@
-import { Component } from '@angular/core';
+import { Component, inject } from '@angular/core';
 import { ICellRendererAngularComp } from 'ag-grid-angular';
 import { ICellRendererParams } from 'ag-grid-community';
+import { ActivitiesService } from '../activities.service';
 
 @Component({
   selector: 'app-cell-button',
@@ -15,11 +16,18 @@ import { ICellRendererParams } from 'ag-grid-community';
     </button>`
 })
 export class CellButtonComponent implements ICellRendererAngularComp {
-  agInit(params: ICellRendererParams): void {}
+  activitiesService = inject(ActivitiesService);
+  id = {};
+
+  agInit(params: ICellRendererParams): void {
+    this.id = params.data.id;
+  }
   refresh(params: ICellRendererParams) {
     return true;
   }
+
   buttonClicked() {
-    alert("clicked");
+    console.log(this.id)
+    this.activitiesService.deleteActivity(+this.id);
   }
 }
