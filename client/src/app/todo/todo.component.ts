@@ -77,20 +77,20 @@ export class TodoComponent {
 
   addTodo() {
     const dialogRef = this.dialog.open(Dialog, {
-      data: { title: this.title() }
+      data: { title: this.title(), description: this.description() }
     });
 
     dialogRef.afterClosed().subscribe(result => {
       console.log('The dialog was closed');
-      if (result === '') {
+      if (result.title === '') {
         this.openSnackBar('Title is required', 'Close');
         return;
       }
       if (result !== undefined) {
         this.todoService.addTodo({
           id: new Date().getTime(),
-          title: result,
-          description: '',
+          title: result.title,
+          description: result.description,
           completed: false
         });
         this.todos = this.todoService.getTodos();
@@ -105,7 +105,7 @@ export class TodoComponent {
 
   updateTodo(todo:Todo) {
     const dialogRef = this.dialog.open(Dialog, {
-      data: { title: todo.title }
+      data: { title: todo.title, description: todo.description }
     });
 
     dialogRef.afterClosed().subscribe(result => {
@@ -113,8 +113,8 @@ export class TodoComponent {
       if (result !== undefined) {
         this.todoService.updateTodo({
           id: todo.id,
-          title: result,
-          description: todo.description,
+          title: result.title,
+          description: result.description,
           completed: todo.completed
         });
         this.todos = this.todoService.getTodos();
@@ -146,6 +146,16 @@ export class Dialog {
   readonly dialogRef = inject(MatDialogRef<Dialog>);
   readonly data = inject<DialogData>(MAT_DIALOG_DATA);
   readonly title = model(this.data.title);
+  readonly description = model(this.data.description);
+
+  constructor() {}
+
+  returnedValue() {
+    return {
+      title: this.title(),
+      description: this.description()
+    }
+  }
 
   onNoClick(): void {
     this.dialogRef.close();
