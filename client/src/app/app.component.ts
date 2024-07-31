@@ -1,12 +1,16 @@
 import { Component } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
+import { LayoutComponent } from "./layout/layout.component";
 
 @Component({
   selector: 'app-root',
   standalone: true,
-  imports: [RouterOutlet],
+  imports: [RouterOutlet, LayoutComponent],
   template: `
-    <router-outlet />
+    <div class="flex min-h-screen">
+      <app-layout />
+      <router-outlet />
+    </div>
   `,
   styleUrl: './app.component.css'
 })
