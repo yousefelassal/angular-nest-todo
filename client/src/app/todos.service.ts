@@ -75,8 +75,16 @@ export class TodosService {
   }
 
   toggleCompleted(id:number) {
-    const index = this.todos.findIndex(todo => todo.id === id);
-    this.todos[index].completed = !this.todos[index].completed;
+    const todo = this.todos.find(todo => todo.id === id);
+    if (!todo) return;
+    todo.completed = !todo.completed;
+    this.activityService.addActivity({
+      id: this.activityService.activities.length + 1,
+      actor: 'John Doe',
+      action: todo.completed ? 'completed' : 'uncompleted',
+      target: todo.title,
+      date: new Date().toISOString()
+    });
   }
 
   getCompletedCount() {
