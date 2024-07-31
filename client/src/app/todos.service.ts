@@ -1,5 +1,6 @@
 import { Injectable } from '@angular/core';
 import { Todo } from './todo';
+import { ActivitiesService } from './activities.service';
 
 @Injectable({
   providedIn: 'root'
@@ -25,7 +26,7 @@ export class TodosService {
       completed: false
     }
   ]
-  constructor() { }
+  constructor(private activityService:ActivitiesService) {}
 
   getTodos() {
     return this.todos;
@@ -33,15 +34,36 @@ export class TodosService {
 
   addTodo(todo:Todo) {
     this.todos.push(todo);
+    this.activityService.addActivity({
+      id: this.activityService.activities.length + 1,
+      actor: 'John Doe',
+      action: 'created',
+      target: todo.title,
+      date: new Date().toISOString()
+    });
   }
 
   deleteTodo(id:number) {
     this.todos = this.todos.filter(todo => todo.id !== id);
+    this.activityService.addActivity({
+      id: this.activityService.activities.length + 1,
+      actor: 'John Doe',
+      action: 'deleted',
+      target: `Todo ${id}`,
+      date: new Date().toISOString()
+    });
   }
 
   updateTodo(todo:Todo) {
     const index = this.todos.findIndex(t => t.id === todo.id);
     this.todos[index] = todo;
+    this.activityService.addActivity({
+      id: this.activityService.activities.length + 1,
+      actor: 'John Doe',
+      action: 'updated',
+      target: todo.title,
+      date: new Date().toISOString()
+    });
   }
 
   getCompletedTodos() {
@@ -71,9 +93,23 @@ export class TodosService {
 
   clearCompleted() {
     this.todos = this.getUncompletedTodos();
+    this.activityService.addActivity({
+      id: this.activityService.activities.length + 1,
+      actor: 'John Doe',
+      action: 'cleared',
+      target: 'cleared completed todos',
+      date: new Date().toISOString()
+    });
   }
 
   clearAll() {
     this.todos = [];
+    this.activityService.addActivity({
+      id: this.activityService.activities.length + 1,
+      actor: 'John Doe',
+      action: 'cleared',
+      target: 'cleared all todos',
+      date: new Date().toISOString()
+    });
   }
 }
