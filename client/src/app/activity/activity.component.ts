@@ -5,6 +5,7 @@ import 'ag-grid-community/styles/ag-grid.css';
 import 'ag-grid-community/styles/ag-theme-quartz.css';
 import { Activity } from '../activity';
 import { ActivitiesService } from '../activities.service';
+import { CellButtonComponent } from '../cell-button/cell-button.component';
 
 @Component({
   selector: 'app-activity',
@@ -18,10 +19,11 @@ import { ActivitiesService } from '../activities.service';
         [rowData]="rowData"
         [columnDefs]="colDefs"
         [defaultColDef]="defaultColDef"
+        [pagination]="true"
+        [paginationPageSize]="20"
       />
     </div>
-  `,
-  styleUrl: './activity.component.css'
+  `
 })
 export class ActivityComponent {
   activitiesService = inject(ActivitiesService);
@@ -30,11 +32,12 @@ export class ActivityComponent {
  
   // Column Definitions: Defines the columns to be displayed.
   colDefs: ColDef[] = [
-    { field: "id" },
-    { field: "actor" },
-    { field: "action" },
-    { field: "target" },
-    { field: "date" }
+    { field: "id", flex: 0.5 },
+    { field: "actor", filter: true, floatingFilter: true },
+    { field: "action", filter: true, floatingFilter: true },
+    { field: "target", filter: true, floatingFilter: true },
+    { field: "date" },
+    { field: "delete", cellRenderer: CellButtonComponent, flex: 0.5 }
   ];
 
   defaultColDef: ColDef = {

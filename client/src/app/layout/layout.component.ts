@@ -26,8 +26,7 @@ import { RouterLink, RouterLinkActive } from '@angular/router';
         Activity
       </a>
     </div>
-  `,
-  styleUrl: './layout.component.css'
+  `
 })
 export class LayoutComponent {
 
