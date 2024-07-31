@@ -1,11 +1,29 @@
-import { Component, inject } from '@angular/core';
+import { Component, inject, model, signal } from '@angular/core';
 import { TodosService } from '../todos.service';
 import { Todo } from '../todo';
+import {FormsModule} from '@angular/forms';
+import {MatButtonModule} from '@angular/material/button';
+import {
+  MAT_DIALOG_DATA,
+  MatDialog,
+  MatDialogActions,
+  MatDialogClose,
+  MatDialogContent,
+  MatDialogRef,
+  MatDialogTitle,
+} from '@angular/material/dialog';
+import {MatFormFieldModule} from '@angular/material/form-field';
+import {MatInputModule} from '@angular/material/input';
+
+export interface DialogData {
+  title: string;
+  description: string;
+}
 
 @Component({
   selector: 'app-todo',
   standalone: true,
-  imports: [],
+  imports: [MatFormFieldModule, MatInputModule, FormsModule, MatButtonModule],
   template:`
     <div class="flex flex-col gap-4 py-8 px-4 w-[calc(100vw-280px)]">
       <button (click)="addTodo()">Add Todo</button>
@@ -33,16 +51,40 @@ import { Todo } from '../todo';
         }
       </div>
     </div>
+    <button mat-raised-button (click)="openDialog()">Pick one</button>
+
   `,
   styleUrl: './todo.component.css'
 })
 export class TodoComponent {
+  readonly title = signal('');
+  readonly description = signal('');
+  readonly dialog = inject(MatDialog);
+
   todoService = inject(TodosService);
   todos:Todo[] = []
   isHovering:boolean = false;
 
   constructor() {
     this.todos = this.todoService.getTodos();
+  }
+
+  openDialog(): void {
+    const dialogRef = this.dialog.open(Dialog, {
+      data: { title: this.title() }
+    });
+
+    dialogRef.afterClosed().subscribe(result => {
+      console.log('The dialog was closed');
+      if (result !== undefined) {
+        this.todoService.addTodo({
+          id: new Date().getTime(),
+          title: result,
+          description: '',
+          completed: false
+        });
+      }
+    });
   }
 
   addTodo() {
@@ -65,5 +107,30 @@ export class TodoComponent {
 
   completeTodo(id:number) {
     this.todoService.toggleCompleted(id);
+  }
+}
+
+@Component({
+  selector: 'dialog',
+  templateUrl: './dialog.html',
+  standalone: true,
+  imports: [
+    MatFormFieldModule,
+    MatInputModule,
+    FormsModule,
+    MatButtonModule,
+    MatDialogTitle,
+    MatDialogContent,
+    MatDialogActions,
+    MatDialogClose,
+  ],
+})
+export class Dialog {
+  readonly dialogRef = inject(MatDialogRef<Dialog>);
+  readonly data = inject<DialogData>(MAT_DIALOG_DATA);
+  readonly title = model(this.data.title);
+
+  onNoClick(): void {
+    this.dialogRef.close();
   }
 }
