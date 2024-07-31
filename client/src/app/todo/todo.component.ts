@@ -4,7 +4,11 @@ import { Component } from '@angular/core';
   selector: 'app-todo',
   standalone: true,
   imports: [],
-  templateUrl: './todo.component.html',
+  template:`
+    <div class="py-8 px-4">
+      hello from todo
+    </div>
+  `,
   styleUrl: './todo.component.css'
 })
 export class TodoComponent {
