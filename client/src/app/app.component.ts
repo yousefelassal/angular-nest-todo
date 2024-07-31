@@ -7,7 +7,7 @@ import { LayoutComponent } from "./layout/layout.component";
   standalone: true,
   imports: [RouterOutlet, LayoutComponent],
   template: `
-    <div class="flex min-h-screen">
+    <div class="flex min-h-screen relative">
       <app-layout />
       <router-outlet />
     </div>

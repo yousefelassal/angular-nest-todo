@@ -14,6 +14,7 @@ import {
 } from '@angular/material/dialog';
 import {MatFormFieldModule} from '@angular/material/form-field';
 import {MatInputModule} from '@angular/material/input';
+import {MatSnackBar} from '@angular/material/snack-bar';
 
 export interface DialogData {
   title: string;
@@ -50,7 +51,7 @@ export interface DialogData {
         }
       </div>
     </div>
-    <button mat-raised-button (click)="addTodo()">Add Todo</button>
+    <button mat-raised-button class="fixed-button" (click)="addTodo()">Add Todo</button>
 
   `,
   styleUrl: './todo.component.css'
@@ -64,8 +65,14 @@ export class TodoComponent {
   todos:Todo[] = []
   isHovering:boolean = false;
 
-  constructor() {
+  constructor(private _snakBar: MatSnackBar) {
     this.todos = this.todoService.getTodos();
+  }
+
+  openSnackBar(message: string, action: string) {
+    this._snakBar.open(message, action, {
+      duration: 2000,
+    });
   }
 
   addTodo() {
@@ -75,6 +82,10 @@ export class TodoComponent {
 
     dialogRef.afterClosed().subscribe(result => {
       console.log('The dialog was closed');
+      if (result === '') {
+        this.openSnackBar('Title is required', 'Close');
+        return;
+      }
       if (result !== undefined) {
         this.todoService.addTodo({
           id: new Date().getTime(),
