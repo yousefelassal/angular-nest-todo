@@ -41,7 +41,7 @@ export class ActivityComponent {
     { field: "actor", filter: true, floatingFilter: true },
     { field: "action", filter: true, floatingFilter: true },
     { field: "target", filter: true, floatingFilter: true },
-    { field: "date" },
+    { field: "date", valueFormatter: (params) => new Date(params.value).toLocaleDateString() },
     { field: "delete", cellRenderer: CellButtonComponent, flex: 0.5, cellRendererParams: { delete: this.deleteActivity.bind(this) } }
   ];
 

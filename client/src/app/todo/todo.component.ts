@@ -7,21 +7,25 @@ import { Todo } from '../todo';
   standalone: true,
   imports: [],
   template:`
-    <div class="flex flex-col gap-4 py-8 px-4">
-      <button class="btn" (click)="addTodo()">Add Todo</button>
+    <div class="flex flex-col gap-4 py-8 px-4 w-[calc(100vw-280px)]">
+      <button (click)="addTodo()">Add Todo</button>
       <div class="flex flex-col gap-4">
         @for (todo of todos; track todo.id) {
-          <div class="flex flex-col gap-2">
+          <div class="flex flex-col">
             <div class="flex gap-2">
-              <input type="checkbox" [checked]="todo.completed" (change)="completeTodo(todo.id)">
-              <div class="flex flex-col">
-                <div class="font-bold">{{ todo.title }}</div>
-                <div>{{ todo.description }}</div>
-              </div>
+              <label class="flex-1 checkbox-container p-[8px_15px_8px_22px] w-full flex justify-between items-center cursor-pointer hover:bg-blue-100/80 transition-colors rounded-lg">
+                <div [class]="['flex flex-1 flex-col', todo.completed ? 'line-through' : '']">
+                  <div class="font-bold">{{ todo.title }}</div>
+                  <div>{{ todo.description }}</div>
+                </div>
+                <label class="checkbox">
+                  <input id="checkbox" [checked]="todo.completed" (change)="completeTodo(todo.id)" class="hidden" type="checkbox" />
+                </label>
+              </label>
             </div>
             <div class="flex gap-2">
-              <button class="btn" (click)="deleteTodo(todo.id)">Delete</button>
-              <button class="btn" (click)="updateTodo(todo)">Update</button>
+              <button (click)="deleteTodo(todo.id)">Delete</button>
+              <button (click)="updateTodo(todo)">Update</button>
             </div>
           </div>
         } @empty {

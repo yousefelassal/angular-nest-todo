@@ -11,21 +11,21 @@ export class ActivitiesService {
       actor: 'John Doe',
       action: 'created',
       target: 'Todo 1',
-      date: '2021-01-01'
+      date: new Date().toISOString()
     },
     {
       id: 2,
       actor: 'Jane Doe',
       action: 'completed',
       target: 'Todo 2',
-      date: '2021-01-02'
+      date: new Date().toISOString()
     },
     {
       id: 3,
       actor: 'John Doe',
       action: 'deleted',
       target: 'Todo 3',
-      date: '2021-01-03'
+      date: new Date().toISOString()
     }
   ]
   constructor() { }
