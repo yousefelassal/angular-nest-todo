@@ -7,16 +7,19 @@ import { Todo } from './todo';
 export class TodosService {
   todos:Todo[] = [
     {
+      id: 1,
       title: 'Todo 1',
       description: 'This is the first todo',
       completed: false
     },
     {
+      id: 2,
       title: 'Todo 2',
       description: 'This is the second todo',
       completed: true
     },
     {
+      id: 3,
       title: 'Todo 3',
       description: 'This is the third todo',
       completed: false
@@ -32,11 +35,12 @@ export class TodosService {
     this.todos.push(todo);
   }
 
-  deleteTodo(index:number) {
-    this.todos.splice(index, 1);
+  deleteTodo(id:number) {
+    this.todos = this.todos.filter(todo => todo.id !== id);
   }
 
-  updateTodo(index:number, todo:Todo) {
+  updateTodo(todo:Todo) {
+    const index = this.todos.findIndex(t => t.id === todo.id);
     this.todos[index] = todo;
   }
 
@@ -48,15 +52,8 @@ export class TodosService {
     return this.todos.filter(todo => !todo.completed);
   }
 
-  getTodoByIndex(index:number) {
-    return this.todos[index];
-  }
-
-  getTodoIndex(todo:Todo) {
-    return this.todos.indexOf(todo);
-  }
-
-  toggleCompleted(index:number) {
+  toggleCompleted(id:number) {
+    const index = this.todos.findIndex(todo => todo.id === id);
     this.todos[index].completed = !this.todos[index].completed;
   }
 
