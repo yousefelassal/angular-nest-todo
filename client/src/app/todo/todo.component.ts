@@ -11,9 +11,9 @@ import { Todo } from '../todo';
       <button (click)="addTodo()">Add Todo</button>
       <div class="flex flex-col gap-4">
         @for (todo of todos; track todo.id) {
-          <div class="flex flex-col">
+          <div class="flex flex-col bg-gray-50 rounded-xl">
             <div class="flex gap-2">
-              <label class="flex-1 checkbox-container p-[8px_15px_8px_22px] w-full flex justify-between items-center cursor-pointer hover:bg-blue-100/80 transition-colors rounded-lg">
+              <label class="flex-1 checkbox-container p-[8px_15px_8px_22px] w-full flex justify-between items-center cursor-pointer">
                 <div [class]="['flex flex-1 flex-col', todo.completed ? 'line-through' : '']">
                   <div class="font-bold">{{ todo.title }}</div>
                   <div>{{ todo.description }}</div>
@@ -23,7 +23,7 @@ import { Todo } from '../todo';
                 </label>
               </label>
             </div>
-            <div class="flex gap-2">
+            <div class="flex gap-2 ml-5">
               <button (click)="deleteTodo(todo.id)">Delete</button>
               <button (click)="updateTodo(todo)">Update</button>
             </div>
@@ -39,6 +39,7 @@ import { Todo } from '../todo';
 export class TodoComponent {
   todoService = inject(TodosService);
   todos:Todo[] = []
+  isHovering:boolean = false;
 
   constructor() {
     this.todos = this.todoService.getTodos();
