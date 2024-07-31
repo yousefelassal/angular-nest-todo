@@ -47,7 +47,6 @@ export class TodoComponent {
       description: `This is todo ${this.todos.length + 1}`,
       completed: false
     });
-    this.todos = this.todoService.getTodos();
   }
 
   deleteTodo(id:number) {
@@ -57,11 +56,9 @@ export class TodoComponent {
 
   updateTodo(todo:Todo) {
     this.todoService.updateTodo(todo);
-    this.todos = this.todoService.getTodos();
   }
 
   completeTodo(id:number) {
     this.todoService.toggleCompleted(id);
-    this.todos = this.todoService.getTodos();
   }
 }

@@ -36,14 +36,13 @@ export class ActivityComponent {
   
   rowData:Activity[] = [];
  
-  // Column Definitions: Defines the columns to be displayed.
   colDefs: ColDef[] = [
     { field: "id", flex: 0.5 },
     { field: "actor", filter: true, floatingFilter: true },
     { field: "action", filter: true, floatingFilter: true },
     { field: "target", filter: true, floatingFilter: true },
     { field: "date" },
-    { field: "delete", cellRenderer: CellButtonComponent, flex: 0.5 }
+    { field: "delete", cellRenderer: CellButtonComponent, flex: 0.5, cellRendererParams: { delete: this.deleteActivity.bind(this) } }
   ];
 
   defaultColDef: ColDef = {
@@ -51,6 +50,11 @@ export class ActivityComponent {
   }
 
   constructor() {
+    this.rowData = this.activitiesService.getActivities();
+  }
+
+  deleteActivity(id:number) {
+    this.activitiesService.deleteActivity(id)
     this.rowData = this.activitiesService.getActivities();
   }
 }
