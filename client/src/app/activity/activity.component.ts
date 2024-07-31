@@ -13,15 +13,21 @@ import { CellButtonComponent } from '../cell-button/cell-button.component';
   imports: [AgGridAngular],
   template:`
     <div class="w-[calc(100vw-280px)] h-full flex flex-1 flex-col gap-4 p-4">
-      <ag-grid-angular
-        class="ag-theme-quartz flex-1"
-        style="height: 100%; width: 100%;"
-        [rowData]="rowData"
-        [columnDefs]="colDefs"
-        [defaultColDef]="defaultColDef"
-        [pagination]="true"
-        [paginationPageSize]="20"
-      />
+      @defer() {
+        <ag-grid-angular
+          class="ag-theme-quartz flex-1"
+          style="height: 100%; width: 100%;"
+          [rowData]="rowData"
+          [columnDefs]="colDefs"
+          [defaultColDef]="defaultColDef"
+          [pagination]="true"
+          [paginationPageSize]="20"
+        />
+      } @placeholder {
+        <div>Loading...</div>
+      } @loading {
+        <div>Loading...</div>
+      }
     </div>
   `
 })
